@@ -2,9 +2,9 @@ import streamlit as st
 import pandas as pd
 
 from Modules import chargement_donnees
-#from Modules.procession_donnees import analyze_data, handle_missing_values
-#from Modules.pipeline import create_ml_pipeline
-#from Modules.evaluation import evaluate_model
+from Modules.procession_donnees import analyze_data, handle_missing_values
+from Modules.pipeline import create_ml_pipeline
+from Modules.evaluation import evaluate_model
 
 def main():
     st.set_page_config(page_title="Analyse de Vin", layout="wide")
@@ -32,9 +32,9 @@ def main():
 
 def load_data_tab():
     st.header("Chargement des données")
-    st.session_state.df = load_data()
+    st.session_state.df = chargement_donnees.load_data()
     if st.session_state.df is not None:
-        display_data_info(st.session_state.df)
+        chargement_donnees.display_data_info(st.session_state.df)
 
 def process_data_tab():
     if st.session_state.df is not None:
