@@ -1,115 +1,115 @@
 import streamlit as st
 import textwrap
 
-# Configuration de la page
-st.set_page_config(page_title="Présentation des Outils Streamlit", layout="wide")
+# Set up page configuration
+st.set_page_config(page_title="Streamlit Tool Showcase", layout="wide")
 
-# Titre de l'application
-st.title("Présentation des Composants Streamlit avec Exemples Visuels")
-st.write("Explorez les exemples de tous les outils Streamlit avec des descriptions, des exemples fonctionnels et des extraits de code. Voir un aperçu en direct de chaque outil directement dans l'application.")
+# App Title
+st.title("Streamlit Component Showcase with Visual Examples")
+st.write("Explore examples of all Streamlit tools with descriptions, working examples, and code snippets. See a live preview of each tool right in the app.")
 
-# Onglets pour organisation
-tabs = st.tabs(["Composants Textuels", "Widgets de Saisie", "Médias", "Mises en Page", "Autres Outils"])
+# Tabs for organization
+tabs = st.tabs(["Text Components", "Input Widgets", "Media", "Layouts", "Other Tools"])
 
-# Fonction d'assistance pour afficher des exemples avec aperçus visuels
+# Helper function for displaying examples with visual previews
 def show_example(description, code, render_function):
-    # Exemple Visuel
-    st.markdown(f"### Exemple Visuel")
+    # Visual Example
+    st.markdown(f"### Visual Example")
     render_function()
     
-    # Description et Code
-    st.markdown(f"**Description :** {description}")
-    st.markdown("**Code :**")
+    # Description and Code
+    st.markdown(f"**Description:** {description}")
+    st.markdown("**Code:**")
     code_snippet = textwrap.dedent(code).strip()
     st.code(code_snippet, language="python")
-    st.button("Copier le Code", key=code_snippet)  # Placeholder pour le bouton de copie
+    st.button("Copy Code", key=code_snippet)  # Placeholder for copy button
 
-# Onglet Composants Textuels
+# Text Components Tab
 with tabs[0]:
-    st.header("Composants Textuels")
+    st.header("Text Components")
     
     show_example(
-        "Affiche un grand titre pour les sections.",
+        "Display a large header for section titles.",
         """
-        st.header("Un Grand Titre")
+        st.header("A Large Header")
         """,
-        lambda: st.header("Un Grand Titre")
+        lambda: st.header("A Large Header")
     )
     
     show_example(
-        "Utilisez Markdown pour formater du texte riche comme **gras**, *italique*, ou des [liens](https://streamlit.io).",
+        "Use Markdown for rich text formatting like **bold**, *italicized*, or [links](https://streamlit.io).",
         """
-        st.markdown("Markdown est **gras**, *italique*, ou possède des [liens](https://streamlit.io).")
+        st.markdown("Markdown is **bold**, *italicized*, or has [links](https://streamlit.io).")
         """,
-        lambda: st.markdown("Markdown est **gras**, *italique*, ou possède des [liens](https://streamlit.io).")
+        lambda: st.markdown("Markdown is **bold**, *italicized*, or has [links](https://streamlit.io).")
     )
     
     show_example(
-        "Affichez des blocs de code Python avec surlignage de syntaxe.",
+        "Render Python code blocks with syntax highlighting.",
         """
-        st.code("print('Bonjour, Streamlit!')", language="python")
+        st.code("print('Hello, Streamlit!')", language="python")
         """,
-        lambda: st.code("print('Bonjour, Streamlit!')", language="python")
+        lambda: st.code("print('Hello, Streamlit!')", language="python")
     )
     
     show_example(
-        "Affichez des équations mathématiques en utilisant la syntaxe LaTeX.",
+        "Render mathematical equations using LaTeX syntax.",
         """
         st.latex(r"a^2 + b^2 = c^2")
         """,
         lambda: st.latex(r"a^2 + b^2 = c^2")
     )
 
-# Onglet Widgets de Saisie
+# Input Widgets Tab
 with tabs[1]:
-    st.header("Widgets de Saisie")
+    st.header("Input Widgets")
     
     show_example(
-        "Créez un champ de saisie pour les données utilisateur.",
+        "Create a text input field for user data.",
         """
-        name = st.text_input("Entrez votre nom :")
+        name = st.text_input("Enter your name:")
         """,
-        lambda: st.text_input("Entrez votre nom :")
+        lambda: st.text_input("Enter your name:")
     )
     
     show_example(
-        "Ajoutez une case à cocher pour basculer des options.",
+        "Add a checkbox for toggling options.",
         """
-        agree = st.checkbox("J'accepte les termes et conditions")
+        agree = st.checkbox("I agree to the terms and conditions")
         """,
-        lambda: st.checkbox("J'accepte les termes et conditions")
+        lambda: st.checkbox("I agree to the terms and conditions")
     )
     
     show_example(
-        "Sélectionnez une option parmi un groupe à l'aide de boutons radio.",
+        "Select a single option from a group using radio buttons.",
         """
-        choice = st.radio("Choisissez une option :", ["Option 1", "Option 2", "Option 3"])
+        choice = st.radio("Pick an option:", ["Option 1", "Option 2", "Option 3"])
         """,
-        lambda: st.radio("Choisissez une option :", ["Option 1", "Option 2", "Option 3"])
+        lambda: st.radio("Pick an option:", ["Option 1", "Option 2", "Option 3"])
     )
     
     show_example(
-        "Utilisez un curseur pour choisir une valeur numérique.",
+        "Use a slider to pick a numeric value.",
         """
-        value = st.slider("Choisissez une valeur :", 0, 100, 50)
+        value = st.slider("Choose a value:", 0, 100, 50)
         """,
-        lambda: st.slider("Choisissez une valeur :", 0, 100, 50)
+        lambda: st.slider("Choose a value:", 0, 100, 50)
     )
 
-# Onglet Médias
+# Media Tab
 with tabs[2]:
-    st.header("Médias")
+    st.header("Media")
     
     show_example(
-        "Affichez une image avec une légende facultative.",
+        "Display an image with an optional caption.",
         """
-        st.image("https://via.placeholder.com/300", caption="Image Exemple")
+        st.image("https://via.placeholder.com/300", caption="Sample Image")
         """,
-        lambda: st.image("https://via.placeholder.com/300", caption="Image Exemple")
+        lambda: st.image("https://via.placeholder.com/300", caption="Sample Image")
     )
     
     show_example(
-        "Lisez un fichier audio directement dans l'application.",
+        "Play an audio file directly in the app.",
         """
         st.audio("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3")
         """,
@@ -117,48 +117,48 @@ with tabs[2]:
     )
     
     show_example(
-        "Intégrez une vidéo que les utilisateurs peuvent lire.",
+        "Embed a video that users can play.",
         """
         st.video("https://www.w3schools.com/html/mov_bbb.mp4")
         """,
         lambda: st.video("https://www.w3schools.com/html/mov_bbb.mp4")
     )
 
-# Onglet Mises en Page
+# Layouts Tab
 with tabs[3]:
-    st.header("Mises en Page")
+    st.header("Layouts")
     
     show_example(
-        "Créez des mises en page côte à côte à l'aide de colonnes.",
+        "Create side-by-side layouts using columns.",
         """
         col1, col2 = st.columns(2)
         with col1:
-            st.write("Ceci est la colonne 1")
+            st.write("This is Column 1")
         with col2:
-            st.write("Ceci est la colonne 2")
+            st.write("This is Column 2")
         """,
         lambda: (
-            st.columns(2)[0].write("Ceci est la colonne 1"),
-            st.columns(2)[1].write("Ceci est la colonne 2"),
+            st.columns(2)[0].write("This is Column 1"),
+            st.columns(2)[1].write("This is Column 2"),
         )
     )
     
     show_example(
-        "Ajoutez des sections repliables avec des expanseurs.",
+        "Add collapsible sections with expanders.",
         """
-        with st.expander("Développez pour plus d'infos"):
-            st.write("Ceci est à l'intérieur d'un expandeur.")
+        with st.expander("Expand for more info"):
+            st.write("This is inside an expander.")
         """,
-        lambda: st.expander("Développez pour plus d'infos").write("Ceci est à l'intérieur d'un expandeur.")
+        lambda: st.expander("Expand for more info").write("This is inside an expander.")
     )
 
 
-# Onglet Autres Outils
+# Other Tools Tab
 with tabs[4]:
-    st.header("Autres Outils Utiles")
+    st.header("Other Useful Tools")
     
     show_example(
-        "Affichez une barre de progression pour les tâches.",
+        "Display a progress bar for tasks.",
         """
         st.progress(70)
         """,
@@ -167,28 +167,28 @@ with tabs[4]:
 
     
     show_example(
-        "Affichez un spinner pendant l'attente d'une tâche.",
+        "Show a spinner while waiting for a task to complete.",
         """
-        with st.spinner("Chargement..."):
-            st.success("Tâche terminée !")
+        with st.spinner("Loading..."):
+            st.success("Task completed!")
         """,
-        # Utilisation correcte : pas de lambda nécessaire, exécuter directement avec le bloc
+        # Correct usage: No lambda needed, directly execute with block
         lambda: (
-            st.spinner("Chargement..."),
-            st.success("Tâche terminée !")
+            st.spinner("Loading..."),
+            st.success("Task completed!")
         )
     )
     
     show_example(
-        "Affichez des messages d'erreur, d'avertissement ou d'information.",
+        "Render error, warning, or info messages.",
         """
-        st.error("Ceci est un message d'erreur.")
-        st.warning("Ceci est un message d'avertissement.")
-        st.info("Ceci est un message informatif.")
+        st.error("This is an error message.")
+        st.warning("This is a warning message.")
+        st.info("This is an informational message.")
         """,
         lambda: (
-            st.error("Ceci est un message d'erreur."),
-            st.warning("Ceci est un message d'avertissement."),
-            st.info("Ceci est un message informatif.")
+            st.error("This is an error message."),
+            st.warning("This is a warning message."),
+            st.info("This is an informational message.")
         )
     )
