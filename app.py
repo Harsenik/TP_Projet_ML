@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 
-#from Modules import chargement_donnees
+from Modules import chargement_donnees
 #from Modules.procession_donnees import analyze_data, handle_missing_values
 #from Modules.pipeline import create_ml_pipeline
 #from Modules.evaluation import evaluate_model
