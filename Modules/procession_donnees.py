@@ -1,35 +1,39 @@
 import streamlit as st
-import seaborn as sns
+import pandas as pd
 import matplotlib.pyplot as plt
+import seaborn as sns
 
-def process_data(data):
-    st.subheader("Analyse Descriptive")
-    st.write(data.describe())
-    
-    st.subheader("Graphique de distribution")
-    st.hist(data["alcohol"])
-    
-    st.subheader("Pairplot")
-    st.pyplot(sns.pairplot(data, hue="quality"))
-    
+def analyze_data(df):
+    st.subheader("Analyse descriptive")
+    st.write(df.describe())
+
+    st.subheader("Distribution des variables")
+    column = st.selectbox("Choisissez une colonne pour la distribution", df.columns)
+    fig, ax = plt.subplots()
+    sns.histplot(df[column], kde=True, ax=ax)
+    st.pyplot(fig)
+
     st.subheader("Matrice de corrélation")
-    st.heatmap(data.corr(), annot=True)
-    
+    corr = df.corr()
+    fig, ax = plt.subplots(figsize=(10, 8))
+    sns.heatmap(corr, annot=True, cmap='coolwarm', ax=ax)
+    st.pyplot(fig)
+
+def handle_missing_values(df):
     st.subheader("Gestion des valeurs manquantes")
-    missing_data = data.isnull().sum()
-    st.write(missing_data[missing_data > 0])
-    method = st.radio("Choisissez une méthode pour traiter les valeurs manquantes:", ("Supprimer", "Imputer"))
-    if method == "Imputer":
-        imputation_method = st.selectbox("Choisissez la méthode d'imputation:", ["Mean", "Median", "Mode"])
-        if imputation_method == "Mean":
-            data = data.fillna(data.mean())
-        elif imputation_method == "Median":
-            data = data.fillna(data.median())
-        else:
-            data = data.fillna(data.mode().iloc[0])
-        st.write("Valeurs manquantes imputées")
-    else:
-        data = data.dropna()
-        st.write("Lignes avec valeurs manquantes supprimées")
+    missing_values = df.isnull().sum()
+    st.write("Valeurs manquantes par colonne :")
+    st.write(missing_values)
+
+    method = st.selectbox("Choisissez une méthode pour gérer les valeurs manquantes", 
+                          ["Supprimer", "Remplacer par la moyenne", "Remplacer par la médiane"])
     
-    return data
+    if method == "Supprimer":
+        df = df.dropna()
+    elif method == "Remplacer par la moyenne":
+        df = df.fillna(df.mean())
+    elif method == "Remplacer par la médiane":
+        df = df.fillna(df.median())
+    
+    st.success("Valeurs manquantes traitées!")
+    return df

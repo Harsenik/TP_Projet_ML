@@ -1,31 +1,30 @@
-from turtle import st
 from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LinearRegression, LogisticRegression
-from sklearn.ensemble import RandomForestRegressor, RandomForestClassifier
+from sklearn.preprocessing import StandardScaler
+from sklearn.pipeline import Pipeline
+from sklearn.linear_model import LogisticRegression
+from sklearn.ensemble import RandomForestClassifier
+import streamlit as st
 
-def run_model_pipeline(data):
-    X = data.drop('quality', axis=1)
-    y = data['quality']
-    
+def create_ml_pipeline(df, target_column):
+    X = df.drop(columns=[target_column])
+    y = df[target_column]
+
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-    
-    st.subheader("Choix du modèle")
-    model_type = st.selectbox("Choisissez un modèle:", ["Regression", "Classification"])
-    
-    if model_type == "Regression":
-        model_choice = st.selectbox("Choisissez un modèle de régression:", ["Linear Regression", "Random Forest Regressor"])
-        if model_choice == "Linear Regression":
-            model = LinearRegression().fit(X_train, y_train)
-        else:
-            model = RandomForestRegressor().fit(X_train, y_train)
-    
+
+    algorithm = st.selectbox("Choisissez un algorithme", ["Régression Logistique", "Random Forest"])
+
+    if algorithm == "Régression Logistique":
+        model = LogisticRegression()
     else:
-        model_choice = st.selectbox("Choisissez un modèle de classification:", ["Logistic Regression", "Random Forest Classifier"])
-        if model_choice == "Logistic Regression":
-            model = LogisticRegression().fit(X_train, y_train)
-        else:
-            model = RandomForestClassifier().fit(X_train, y_train)
+        model = RandomForestClassifier()
+
+    pipeline = Pipeline([
+        ('scaler', StandardScaler()),
+        ('model', model)
+    ])
+
+    pipeline.fit(X_train, y_train)
     
-    predictions = model.predict(X_test)
+    st.success("Modèle entraîné avec succès!")
     
-    return model, predictions, y_test
+    return pipeline, X_test, y_test
