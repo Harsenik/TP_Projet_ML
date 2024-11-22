@@ -3,9 +3,13 @@ import pandas as pd
 import joblib
 
 from Modules import chargement_donnees
-from Modules.procession_donnees import analyze_data, handle_missing_values
+from Modules.procession_donnees import analyze_data, handle_missing_values , handle_target_parsing
 from Modules.pipeline import create_ml_pipeline
 from Modules.evaluation import evaluate_model
+
+pd.set_option('display.max_rows', None)  # Afficher toutes les lignes
+pd.set_option('display.max_columns', None)  # Afficher toutes les colonnes
+
 
 def main():
     st.set_page_config(page_title="Analyse de Vin", layout="wide")
@@ -49,7 +53,7 @@ def process_data_tab():
         with subTabs[1]:
             st.header("Traitement des données")
             st.session_state.df = handle_missing_values(st.session_state.df)
-
+            st.session_state.df = handle_target_parsing(st.session_state.df)
             # Sélection de colonnes
             selected_columns = st.multiselect("Sélectionnez les colonnes à conserver", st.session_state.df.columns)
             if selected_columns:
@@ -63,12 +67,15 @@ def ml_pipeline_tab():
         st.header("Pipeline de Machine Learning")
         
         target_column = st.selectbox("Choisissez la colonne cible", st.session_state.df.columns)
-        
-        if st.button("Entraîner le modèle"):
+
+
+        if target_column != "Unnamed: 0":
             st.session_state.model, X_test, y_test = create_ml_pipeline(st.session_state.df, target_column)
             st.session_state.X_test = X_test
             st.session_state.y_test = y_test
             st.success("Modèle entraîné avec succès!")
+
+
         if st.button("Sauvegarder le modèle"):
             joblib.dump(st.session_state.model, 'wine_model.joblib')
             st.success("Modèle sauvegardé avec succès!")
