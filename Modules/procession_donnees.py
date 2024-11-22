@@ -7,19 +7,39 @@ def analyze_data(df):
     st.subheader("Analyse descriptive")
     st.write(df.describe())
 
-    st.subheader("Distribution des variables")
-    column = st.selectbox("Choisissez une colonne pour la distribution", df.columns)
-    fig, ax = plt.subplots()
-    sns.histplot(df[column], kde=True, ax=ax)
-    st.pyplot(fig)
+    # Graphiques disponibles
+    graph_type = st.selectbox("Choisissez le type de graphique", 
+                             ["Distribution", "Corrélation", "Régression"])
 
-    st.subheader("Matrice de corrélation")
-    newDf = df.drop(columns= df.columns[0])  
-    newDf = newDf.drop(columns=['target'])
-    corr = newDf.corr()
-    fig, ax = plt.subplots(figsize=(10, 8))
-    sns.heatmap(corr, annot=True, cmap='coolwarm', ax=ax)
-    st.pyplot(fig)
+    if graph_type == "Distribution":
+        column = st.selectbox("Choisissez une colonne pour la distribution", df.columns)
+        fig, ax = plt.subplots()
+        sns.histplot(df[column], kde=True, ax=ax)
+        st.pyplot(fig)
+
+    elif graph_type == "Corrélation":
+        newDf = df.drop(columns=df.columns[0])
+        newDf = newDf.drop(columns=['target'])
+        corr = newDf.corr()
+        fig, ax = plt.subplots(figsize=(10, 8))
+        sns.heatmap(corr, annot=True, cmap='coolwarm', ax=ax)
+        st.pyplot(fig)
+
+    elif graph_type == "Régression":
+        # Sélection des colonnes pour la régression
+        numeric_cols = df.select_dtypes(include=['float64', 'int64']).columns
+        x_col = st.selectbox("Choisissez la variable X", numeric_cols)
+        y_col = st.selectbox("Choisissez la variable Y", numeric_cols)
+        
+        fig = plt.figure(figsize=(10, 6))
+        sns.lmplot(x=x_col, y=y_col, data=df, hue='target', 
+                  markers=['o', 's', 'D'],
+                  palette='colorblind', 
+                  height=6, 
+                  aspect=1.5, 
+                  ci=None)
+        plt.title(f"Régression linéaire : {x_col} vs {y_col}")
+        st.pyplot(fig)
 
 def handle_missing_values(df):
     st.subheader("Gestion des valeurs manquantes")

@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import joblib
 
 from Modules import chargement_donnees
 from Modules.procession_donnees import analyze_data, handle_missing_values
@@ -68,6 +69,15 @@ def ml_pipeline_tab():
             st.session_state.X_test = X_test
             st.session_state.y_test = y_test
             st.success("Modèle entraîné avec succès!")
+        if st.button("Sauvegarder le modèle"):
+            joblib.dump(st.session_state.model, 'wine_model.joblib')
+            st.success("Modèle sauvegardé avec succès!")
+        if st.button("Charger un modèle"):
+            try:
+                st.session_state.model = joblib.load('wine_model.joblib')
+                st.success("Modèle chargé avec succès!")
+            except:
+                st.error("Aucun modèle sauvegardé trouvé.")
     else:
         st.warning("Veuillez d'abord charger et traiter les données.")
 
