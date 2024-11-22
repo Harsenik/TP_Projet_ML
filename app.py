@@ -16,7 +16,7 @@ def main():
     if 'model' not in st.session_state:
         st.session_state.model = None
 
-    tabs = st.tabs(["Chargement des données", "Traitement des données", "Machine Learning", "Évaluation"])
+    tabs = st.tabs(["Chargement des données", "Visualisation & Traitement des données", "Machine Learning", "Évaluation"])
 
     with tabs[0]:
         load_data_tab()
@@ -38,24 +38,25 @@ def load_data_tab():
 
 def process_data_tab():
     if st.session_state.df is not None:
-        st.header("Traitement des données")
-        
-        # Analyse descriptive
-        if st.checkbox("Afficher l'analyse descriptive"):
+
+        subTabs = st.tabs(["Visualisation des données", "Traitement des données"])
+
+        with subTabs[0]:
+            st.header("Visualisation des données")
             analyze_data(st.session_state.df)
-        
-        # Gestion des valeurs manquantes
-        if st.checkbox("Gérer les valeurs manquantes"):
+    
+        with subTabs[1]:
+            st.header("Traitement des données")
             st.session_state.df = handle_missing_values(st.session_state.df)
-        
-        # Sélection de colonnes
-        selected_columns = st.multiselect("Sélectionnez les colonnes à conserver", st.session_state.df.columns)
-        if selected_columns:
-            st.session_state.df = st.session_state.df[selected_columns]
-            st.success(f"Colonnes sélectionnées : {', '.join(selected_columns)}")
+
+            # Sélection de colonnes
+            selected_columns = st.multiselect("Sélectionnez les colonnes à conserver", st.session_state.df.columns)
+            if selected_columns:
+                st.session_state.df = st.session_state.df[selected_columns]
+                st.success(f"Colonnes sélectionnées : {', '.join(selected_columns)}")
     else:
         st.warning("Veuillez d'abord charger des données dans l'onglet 'Chargement des données'.")
-
+        
 def ml_pipeline_tab():
     if st.session_state.df is not None:
         st.header("Pipeline de Machine Learning")

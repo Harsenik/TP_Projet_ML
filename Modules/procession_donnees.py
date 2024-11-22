@@ -14,7 +14,9 @@ def analyze_data(df):
     st.pyplot(fig)
 
     st.subheader("Matrice de corrélation")
-    corr = df.corr()
+    newDf = df.drop(columns= df.columns[0])  
+    newDf = newDf.drop(columns=['target'])
+    corr = newDf.corr()
     fig, ax = plt.subplots(figsize=(10, 8))
     sns.heatmap(corr, annot=True, cmap='coolwarm', ax=ax)
     st.pyplot(fig)
