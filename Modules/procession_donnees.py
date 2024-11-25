@@ -25,8 +25,24 @@ def analyze_data(df):
         st.pyplot(fig)
 
     elif graph_type == "Pairplot":
-        sns.pairplot(df, hue='target')
-        st.pyplot()
+        # Sélection des colonnes pour le pairplot
+        selected_columns = st.multiselect(
+            "Sélectionnez les colonnes pour le pairplot",
+            df.columns.tolist(),
+            default=df.columns.tolist()
+        )
+        
+        # Ajout d'une mention sur la sélection obligatoire de 'target'
+        st.markdown("*Sélection 'target' obligatoire*")
+
+        if 'target' not in selected_columns:
+            selected_columns.append('target')  # Assurez-vous que 'target' est inclus pour la coloration
+        
+        if len(selected_columns) > 1:  # Vérifiez qu'il y a plus d'une colonne sélectionnée
+            sns.pairplot(df[selected_columns], hue='target')
+            st.pyplot()
+        else:
+            st.warning("Veuillez sélectionner au moins deux colonnes.")
 
     if st.checkbox("Afficher les fréquences des valeurs"):
         column = st.selectbox("Choisissez une colonne pour voir les fréquences", df.columns)
@@ -51,12 +67,9 @@ def handle_missing_values(df):
     st.success("Valeurs manquantes traitées!")
     return df
 
-
 def handle_target_parsing(df):
     # Mapping dictionary
     mapping = {'Vin amer': 1, 'Vin éuilibré': 2, 'Vin sucré': 3}
     # Map the string values to integers
     df['target'] = df['target'].map(mapping)
-    # Ensure the column is of integer type
-    # df['target'] = df['target'].astype(int)
     return df
