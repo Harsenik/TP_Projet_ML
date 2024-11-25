@@ -13,7 +13,7 @@ def update_selection():
     st.session_state.selected_option = st.session_state.selectbox
 
 def create_ml_pipeline(df, target_column):
-    X = df.drop(columns=[target_column])
+    X = df
     y = df[target_column]
     
     # Ensure target is categorical
