@@ -27,6 +27,7 @@ def load_data():
         st.warning("Echec du chargement automatique des données.")
         return None
 
+## Afficher informations sur le dataset
 def display_data_info(df):
     if df is not None:
         st.subheader("Informations sur le dataset")
