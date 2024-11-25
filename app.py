@@ -90,8 +90,47 @@ def ml_pipeline_tab():
 
 def evaluate_model_tab():
     if st.session_state.model is not None:
-        st.header("Évaluation du modèle")
-        evaluate_model(st.session_state.model, st.session_state.X_test, st.session_state.y_test)
+
+
+        subTabs = st.tabs(["Évaluation du modèle", "Prédiction :"])
+
+        with subTabs[0]:
+            st.header("Évaluation du modèle")
+            evaluate_model(st.session_state.model, st.session_state.X_test, st.session_state.y_test)
+
+        with subTabs[1]:   
+            st.header("Prédisez une nouvelle valeur")
+            user_inputs = {}
+
+            feature_names = [
+                "alcohol",
+                "malic_acid",
+                "ash",
+                "alcalinity_of_ash",
+                "magnesium",
+                "total_phenols",
+                "flavanoids",
+                "nonflavanoid_phenols",
+                "proanthocyanins",
+                "color_intensity",
+                "hue",
+                "od280/od315_of_diluted_wines",
+                "proline"
+            ]
+
+            for feature in feature_names:
+                user_inputs[feature] = st.number_input(f"Entrez une valeur pour {feature}:", value=0.0)
+            
+            # Convert inputs to DataFrame for prediction
+            input_df = pd.DataFrame([user_inputs])  # Create a single-row DataFrame
+            
+            if st.button("Prédire"):
+                pipeline = st.session_state.model
+
+                # Use the pipeline to predict the target
+                prediction = pipeline.predict(st.session_state.df)
+                st.success(f"Prédiction : {prediction[0]}")
+
     else:
         st.warning("Veuillez d'abord entraîner un modèle dans l'onglet 'Machine Learning'.")
 
