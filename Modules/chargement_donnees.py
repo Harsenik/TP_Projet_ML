@@ -6,6 +6,7 @@ def load_data():
     if uploaded_file is not None:
         df = pd.read_csv(uploaded_file)
         st.success("Données chargées avec succès!")
+        st.write("Aperçu des données (5 premières lignes) :")
         st.write(df.head())
         return df
     else:
