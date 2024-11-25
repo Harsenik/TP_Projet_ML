@@ -25,21 +25,9 @@ def analyze_data(df):
         sns.heatmap(corr, annot=True, cmap='coolwarm', ax=ax)
         st.pyplot(fig)
 
-    elif graph_type == "Régression":
-        # Sélection des colonnes pour la régression
-        numeric_cols = df.select_dtypes(include=['float64', 'int64']).columns
-        x_col = st.selectbox("Choisissez la variable X", numeric_cols)
-        y_col = st.selectbox("Choisissez la variable Y", numeric_cols)
-        
-        fig = plt.figure(figsize=(10, 6))
-        sns.lmplot(x=x_col, y=y_col, data=df, hue='target', 
-                  markers=['o', 's', 'D'],
-                  palette='colorblind', 
-                  height=6, 
-                  aspect=1.5, 
-                  ci=None)
-        plt.title(f"Régression linéaire : {x_col} vs {y_col}")
-        st.pyplot(fig)
+    elif graph_type == "Pairplot":
+        sns.pairplot(df, hue='target')
+        st.pyplot()
 
 def handle_missing_values(df):
     st.subheader("Gestion des valeurs manquantes")
