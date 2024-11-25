@@ -1,4 +1,4 @@
-Henri : 25/11 : Complétude README et pairplot dans procession_donnees
+Henri : 25/11 : Complétude README et pairplot dans procession_donnees, pairplotv1 ok
 
 Angela 25/11 : Ecriture sur README
 
