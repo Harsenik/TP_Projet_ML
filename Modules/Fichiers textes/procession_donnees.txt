@@ -1,35 +1,71 @@
 import streamlit as st
-import seaborn as sns
+import pandas as pd
 import matplotlib.pyplot as plt
+import seaborn as sns
 
-def process_data(data):
-    st.subheader("Analyse Descriptive")
-    st.write(data.describe())
-    
-    st.subheader("Graphique de distribution")
-    st.hist(data["alcohol"])
-    
-    st.subheader("Pairplot")
-    st.pyplot(sns.pairplot(data, hue="quality"))
-    
-    st.subheader("Matrice de corrélation")
-    st.heatmap(data.corr(), annot=True)
-    
+def analyze_data(df):
+    st.subheader("Analyse descriptive")
+    st.write(df.describe())
+
+    # Graphiques disponibles
+    graph_type = st.selectbox("Choisissez le type de graphique", 
+                             ["Distribution", "Corrélation", "Régression"])
+
+    if graph_type == "Distribution":
+        column = st.selectbox("Choisissez une colonne pour la distribution", df.columns)
+        fig, ax = plt.subplots()
+        sns.histplot(df[column], kde=True, ax=ax)
+        st.pyplot(fig)
+
+    elif graph_type == "Corrélation":
+        newDf = df.drop(columns=df.columns[0])
+        newDf = newDf.drop(columns=['target'])
+        corr = newDf.corr()
+        fig, ax = plt.subplots(figsize=(10, 8))
+        sns.heatmap(corr, annot=True, cmap='coolwarm', ax=ax)
+        st.pyplot(fig)
+
+    elif graph_type == "Régression":
+        # Sélection des colonnes pour la régression
+        numeric_cols = df.select_dtypes(include=['float64', 'int64']).columns
+        x_col = st.selectbox("Choisissez la variable X", numeric_cols)
+        y_col = st.selectbox("Choisissez la variable Y", numeric_cols)
+        
+        fig = plt.figure(figsize=(10, 6))
+        sns.lmplot(x=x_col, y=y_col, data=df, hue='target', 
+                  markers=['o', 's', 'D'],
+                  palette='colorblind', 
+                  height=6, 
+                  aspect=1.5, 
+                  ci=None)
+        plt.title(f"Régression linéaire : {x_col} vs {y_col}")
+        st.pyplot(fig)
+
+def handle_missing_values(df):
     st.subheader("Gestion des valeurs manquantes")
-    missing_data = data.isnull().sum()
-    st.write(missing_data[missing_data > 0])
-    method = st.radio("Choisissez une méthode pour traiter les valeurs manquantes:", ("Supprimer", "Imputer"))
-    if method == "Imputer":
-        imputation_method = st.selectbox("Choisissez la méthode d'imputation:", ["Mean", "Median", "Mode"])
-        if imputation_method == "Mean":
-            data = data.fillna(data.mean())
-        elif imputation_method == "Median":
-            data = data.fillna(data.median())
-        else:
-            data = data.fillna(data.mode().iloc[0])
-        st.write("Valeurs manquantes imputées")
-    else:
-        data = data.dropna()
-        st.write("Lignes avec valeurs manquantes supprimées")
+    missing_values = df.isnull().sum()
+    st.write("Valeurs manquantes par colonne :")
+    st.write(missing_values)
+
+    method = st.selectbox("Choisissez une méthode pour gérer les valeurs manquantes", 
+                          ["Supprimer", "Remplacer par la moyenne", "Remplacer par la médiane"])
     
-    return data
+    if method == "Supprimer":
+        df = df.dropna()
+    elif method == "Remplacer par la moyenne":
+        df = df.fillna(df.mean())
+    elif method == "Remplacer par la médiane":
+        df = df.fillna(df.median())
+    
+    st.success("Valeurs manquantes traitées!")
+    return df
+
+
+def handle_target_parsing(df):
+    # Mapping dictionary
+    mapping = {'Vin amer': 1, 'Vin éuilibré': 2, 'Vin sucré': 3}
+    # Map the string values to integers
+    df['target'] = df['target'].map(mapping)
+    # Ensure the column is of integer type
+    # df['target'] = df['target'].astype(int)
+    return df
