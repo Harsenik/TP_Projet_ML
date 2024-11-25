@@ -21,6 +21,7 @@ def main():
     if 'model' not in st.session_state:
         st.session_state.model = None
 
+    # Menu avec onglets
     tabs = st.tabs(["Chargement des données", "Visualisation & Traitement des données", "Machine Learning", "Évaluation"])
 
     with tabs[0]:
@@ -36,7 +37,7 @@ def main():
         evaluate_model_tab()
 
 def load_data_tab():
-    st.header("Chargement des données")
+    st.title("Chargement des données")
     st.session_state.df = chargement_donnees.load_data()
     if st.session_state.df is not None:
         chargement_donnees.display_data_info(st.session_state.df)
