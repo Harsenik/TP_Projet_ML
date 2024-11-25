@@ -26,7 +26,7 @@ def analyze_data(df):
 
     elif graph_type == "Pairplot":
         sns.pairplot(df, hue='target')
-        st.pyplot(fig)
+        st.pyplot()
 
     if st.checkbox("Afficher les fréquences des valeurs"):
         column = st.selectbox("Choisissez une colonne pour voir les fréquences", df.columns)

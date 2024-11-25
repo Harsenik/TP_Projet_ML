@@ -1,3 +1,5 @@
+Henri : 25/11 : Complétude README et pairplot dans procession_donnees
+
 Angela 25/11 : Ecriture sur README
 
 Waseem 22/11 : Correction d'erreur type pendent la phase machine learning
