@@ -1,4 +1,4 @@
-Henri 26/11 : Enlève message warning 1.31 streamlit
+Henri 26/11 : Enlève message warning 1.31 streamlit, ML V2 (retrait des erreurs, améliorations des labels, plus de sélection de colonne 'target' pris automatiquement)
 
 Henri : 25/11 : Complétude README et pairplot dans procession_donnees, pairplotv1 ok
 
