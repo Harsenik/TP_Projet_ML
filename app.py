@@ -61,20 +61,21 @@ def process_data_tab():
         st.warning("Veuillez d'abord charger des données dans l'onglet 'Chargement des données'.")
 
 def ml_pipeline_tab():
-    # Onglet de machine learning
     if st.session_state.df is not None:
         st.header("Pipeline de Machine Learning")
-        target_column = st.selectbox("Choisissez la colonne cible", st.session_state.df.columns)
-        if target_column != "Unnamed: 0":
-            st.session_state.model, X_test, y_test = create_ml_pipeline(st.session_state.df, target_column)
-            st.session_state.X_test = X_test
-            st.session_state.y_test = y_test
-            st.success("Modèle entraîné avec succès!")
+        
+        # Création et entraînement du modèle
+        st.session_state.model, X_test, y_test = create_ml_pipeline(st.session_state.df, 'target')
+        st.session_state.X_test = X_test
+        st.session_state.y_test = y_test
 
-            # Boutons pour sauvegarder et charger le modèle
+        # Boutons pour sauvegarder et charger le modèle
+        col1, col2 = st.columns(2)
+        with col1:
             if st.button("Sauvegarder le modèle"):
                 joblib.dump(st.session_state.model, 'wine_model.joblib')
                 st.success("Modèle sauvegardé avec succès!")
+        with col2:
             if st.button("Charger un modèle"):
                 try:
                     st.session_state.model = joblib.load('wine_model.joblib')
