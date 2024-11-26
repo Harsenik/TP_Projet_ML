@@ -112,7 +112,7 @@ def create_ml_pipeline(df, target_column):
                 elif model_info['algorithm'] == "KNN":
                     params_str = f"n_neighbors = {model_info['parameters']['n_neighbors']}"
 
-                # Formatage des colonnes avec indentation
+                # Formatage des colonnes avec indentation des informations
                 features_str = ',\n'.join(model_info['features'])
                 
                 st.info(f"""***Informations du modèle***\n- **Algorithme** : {model_info['algorithm']}\n- **Paramètres** : {params_str}\n- **Colonnes utilisées** : {features_str}""")
