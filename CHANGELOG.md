@@ -1,3 +1,5 @@
+Henri 26/11 : Enlève message warning 1.31 streamlit
+
 Henri : 25/11 : Complétude README et pairplot dans procession_donnees, pairplotv1 ok
 
 Waseem: 25/11 : Correction d'erreur de prediction

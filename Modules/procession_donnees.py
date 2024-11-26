@@ -32,6 +32,9 @@ def analyze_data(df):
             default=df.columns.tolist()
         )
         
+        #Enlève warning
+        st.set_option('deprecation.showPyplotGlobalUse', False)
+
         # Ajout d'une mention sur la sélection obligatoire de 'target'
         st.markdown("*Sélection 'target' obligatoire*")
 
