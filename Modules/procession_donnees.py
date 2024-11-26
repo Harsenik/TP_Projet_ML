@@ -52,7 +52,7 @@ def handle_missing_values(df):
     st.subheader("Gestion des valeurs manquantes")
     missing_values = df.isnull().sum()
     st.write("Valeurs manquantes par colonne :")
-    st.write(missing_values)
+    st.table(missing_values)
 
     method = st.selectbox("Choisissez une méthode pour gérer les valeurs manquantes", 
                           ["Supprimer", "Remplacer par la moyenne", "Remplacer par la médiane"])
