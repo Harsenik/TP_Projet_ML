@@ -16,10 +16,11 @@ import streamlit as st
 
 ## Charge automatiquement les données de vin.csv  
 def load_data():
+    st.write("Chargement automatique de vin.csv")
     df = pd.read_csv("Modules/vin.csv")
-    print(df)
+    # print(df)
     if df is not None:
-        st.success("Données chargées avec succès!")
+        st.success("Données chargées avec succès !")
         st.write("Aperçu des données (5 premières lignes) :")
         st.write(df.head())
         return df
@@ -33,5 +34,11 @@ def display_data_info(df):
         st.subheader("Informations sur le dataset")
         st.write(f"Nombre de lignes : {df.shape[0]}")
         st.write(f"Nombre de colonnes : {df.shape[1]}")
+
+        # Créer un DataFrame pour les types de données avec des titres personnalisés
+        dtypes_df = pd.DataFrame({
+            'Type': df.dtypes
+        })
+    if dtypes_df is not None:    
         st.write("Types de données :")
-        st.write(df.dtypes)
+        st.table(dtypes_df)
