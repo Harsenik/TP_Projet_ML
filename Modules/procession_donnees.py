@@ -33,8 +33,8 @@ def analyze_data(df):
         )
         
         #Enlève warning
-        st.set_option('client.showErrorDetails', False)
-        
+        st.set_option('deprecation.showPyplotGlobalUse', False)
+
         # Ajout d'une mention sur la sélection obligatoire de 'target'
         st.markdown("*Sélection 'target' obligatoire*")
 
