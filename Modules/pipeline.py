@@ -8,6 +8,8 @@ from sklearn.neighbors import KNeighborsClassifier
 import streamlit as st
 import pandas as pd
 import numpy as np
+import os
+import joblib
 
 def create_ml_pipeline(df, target_column):
     # Séparation features/target et suppression de la colonne Unnamed: 0
@@ -26,7 +28,7 @@ def create_ml_pipeline(df, target_column):
         options = {
             "Régression Logistique": LogisticRegression(),
             "Random Forest": RandomForestClassifier(),
-            "SVM": SVC(),
+            "SVM": SVC(probability=True),
             "KNN": KNeighborsClassifier()
         }
     else:
@@ -66,6 +68,62 @@ def create_ml_pipeline(df, target_column):
         pipeline.fit(X_train, y_train)
     
     st.success("Modèle entraîné avec succès!")
+
+    # Sauvegarde du modèle avec nom personnalisé
+    if st.checkbox("Sauvegarder le modèle"):
+        model_name = st.text_input("Nom du modèle", "mon_modele")
+        if st.button("Enregistrer"):
+            try:
+                # Création du dossier models s'il n'existe pas
+                if not os.path.exists('models'):
+                    os.makedirs('models')
+                
+                # Sauvegarde du modèle avec ses paramètres
+                model_info = {
+                    'pipeline': pipeline,
+                    'algorithm': algorithm,
+                    'parameters': model.get_params(),
+                    'features': list(X.columns)
+                }
+                joblib.dump(model_info, f'models/{model_name}.joblib')
+                st.success(f"Modèle '{model_name}' sauvegardé avec succès!")
+            except Exception as e:
+                st.error(f"Erreur lors de la sauvegarde : {str(e)}")
+
+    # Chargement d'un modèle existant
+    if st.checkbox("Charger un modèle"):
+        try:
+            # Liste des modèles disponibles
+            model_files = [f for f in os.listdir('models') if f.endswith('.joblib')]
+            if model_files:
+                selected_model = st.selectbox("Sélectionnez un modèle", model_files)
+                
+                # Affichage des informations du modèle
+                model_info = joblib.load(f'models/{selected_model}')
+                
+                # Formatage des paramètres selon l'algorithme
+                params_str = ""
+                if model_info['algorithm'] == "Régression Logistique":
+                    params_str = f"C = {model_info['parameters']['C']}"
+                elif model_info['algorithm'] == "Random Forest":
+                    params_str = f"n_estimators = {model_info['parameters']['n_estimators']}\n    max_depth = {model_info['parameters']['max_depth']}"
+                elif model_info['algorithm'] == "SVM":
+                    params_str = f"C = {model_info['parameters']['C']}\n    kernel = {model_info['parameters']['kernel']}"
+                elif model_info['algorithm'] == "KNN":
+                    params_str = f"n_neighbors = {model_info['parameters']['n_neighbors']}"
+
+                # Formatage des colonnes avec indentation des informations
+                features_str = ',\n'.join(model_info['features'])
+                
+                st.info(f"""***Informations du modèle***\n- **Algorithme** : {model_info['algorithm']}\n- **Paramètres** : {params_str}\n- **Colonnes utilisées** : {features_str}""")
+                
+                if st.button("Charger"):
+                    pipeline = model_info['pipeline']
+                    st.success(f"Modèle '{selected_model}' chargé avec succès!")
+            else:
+                st.warning("Aucun modèle sauvegardé trouvé.")
+        except Exception as e:
+            st.error(f"Erreur lors du chargement : {str(e)}")
 
     # Prédiction sur de nouvelles données
     st.subheader("Prédiction sur de nouvelles données")
